@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Artworks API Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>Chicago Artworks API</h1>
+
+    <!-- User Registration Form -->
+    <form action="register.php" method="POST">
+        <label for="email">Enter Email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <!-- Display API Data -->
+        <h2>Artworks</h2>
+        <div id="artworksInfo"></div>
+
+    <script>
+        function getArtworkData() {
+            axios.get('https://api.artic.edu/api/v1/artworks')
+                .then(function (response) {
+                    const artworks = response.data.data; 
+
+                    if (Array.isArray(artworks)) {
+                        let html = '<ul>';
+                        artworks.forEach(artwork => {
+                            html += `<li>${artwork.artist_id}: ${artwork.artist_title}</li>`;
+                        });
+                        html += '</ul>';
+                        document.getElementById('artworksInfo').innerHTML = html;
+                    } else {
+                        document.getElementById('artworksInfo').innerHTML = 'No artworks found.';
+                    }
+                })
+
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('artworksInfo').innerHTML = 'Error fetching data.';
+                });
+        }
+        getArtworkData();
+    </script>
+
+
+
+</body>
+</html>
